@@ -1,6 +1,6 @@
 class marsdb::service inherits marsdb {
 
-      case $::ntp::ensure {
+      case $::marsdb::ensure {
            'present':{
               $service_ensure = 'running'
               $service_enable = true
