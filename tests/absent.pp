@@ -1,0 +1,3 @@
+class { 'ntp':
+        ensure => 'absent',
+}

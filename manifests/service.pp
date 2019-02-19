@@ -1,20 +1,21 @@
-exec {"Enable Mongo Server service":
-command => 'systemctl enable mongod.service',
-path => ['/bin','/sbin','/usr/sbin'],
-provider => shell,
-onlyif => '/usr/bin/test -e /etc/yum.repos.d/mongodb.repo',
+class marsdb::service inherits marsdb {
+
+      case $::ntp::ensure {
+           'present':{
+              $service_ensure = 'running'
+              $service_enable = true
+            }
+            'absent': {
+              $service_ensure = 'stopped'
+              $service_enable = false
+            }
+            default: { 
+               fail("marsdb::ensure is set to $::marsdb::ensure, whish is not supported!")
+            }
+
+       }
+       service { $::marsdb::service_name:
+               ensure => $service_ensure,
+               enable => $service_enable,
+       }
 }
-
-
-
-exec {"start Mongo Server service":
-command => 'systemctl start mongod.service',
-path => ['/bin','/sbin','/usr/sbin'],
-provider => shell,
-onlyif => '/usr/bin/test -e /etc/yum.repos.d/mongodb.repo',
-}
-
-
-
-
-
